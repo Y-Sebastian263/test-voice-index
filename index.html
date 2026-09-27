@@ -1,7 +1,7 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b1020"><title>Y Voice Coach v3.6.4</title><script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script><style>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b1020"><title>Y Voice Coach v3.6.5</title><script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script><style>
 :root{color-scheme:dark;--bg:#0b1020;--panel:#151b2d;--panel2:#0f1526;--line:#2b3550;--text:#f4f6fb;--muted:#9aa7c2;--accent:#8ab4ff;--good:#82d99d;--cyan:#71d2df;--amber:#ffd166;--orange:#ff9f43;--red:#ff6b6b}*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{max-width:1200px;margin:auto;padding:16px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}.panel,.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px}.panel{margin-top:14px}.cards{display:grid;grid-template-columns:repeat(5,minmax(140px,1fr));gap:10px;margin-top:14px}.label,.small{font-size:12px;color:var(--muted)}.value{font-size:24px;font-weight:800;margin-top:4px;line-height:1.15;min-height:29px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.big{font-size:28px}.pill{padding:6px 10px;border-radius:999px;border:1px solid var(--line);font-size:12px;font-weight:700;white-space:nowrap}button,select,input{font:inherit}button{border:1px solid var(--line);background:#202a45;color:var(--text);padding:10px 14px;border-radius:10px;cursor:pointer}button.primary{background:#315ea8}button.danger{background:#642b38}button:disabled{opacity:.45}select,input{background:var(--panel2);border:1px solid var(--line);color:var(--text);padding:10px;border-radius:10px}input{flex:1;min-width:220px}select{min-width:220px}canvas{display:block;width:100%;height:340px;background:var(--panel2);border-radius:12px;margin-top:10px}#meter{height:10px;background:#111827;border-radius:999px;overflow:hidden;border:1px solid var(--line);flex:1;min-width:180px}#meterFill{height:100%;width:0;background:var(--accent)}.legend{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}.speedPanel{border-color:#3f587d}.legendItem{padding:10px;border-radius:10px;border:1px solid var(--line);text-align:center;font-size:12px}.activeLegend{outline:3px solid #fff;transform:translateY(-1px)}.tone-low2{background:#14283d;border-color:#4e7da5}.tone-low{background:#15363c;border-color:#4c9ca6}.tone-mid{background:#3b3420;border-color:#a58a3a}.tone-high{background:#493122;border-color:#b87840}.tone-high2{background:#4a242b;border-color:#b75b6b}.avgCard{transition:.2s}.toneTag{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:6px 9px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;min-height:30px}.memo{display:flex;gap:10px;border-bottom:1px solid var(--line);padding:8px 0;align-items:center}.time{font-weight:800;white-space:nowrap}.memoTypeBtns{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:10px}.memoChoice{transition:.15s}.memoChoice.selected{outline:3px solid #fff;box-shadow:0 0 0 2px rgba(138,180,255,.35) inset;transform:translateY(-1px)}.eventGroup{margin-top:12px}.eventGroupTitle{font-size:12px;color:var(--muted);margin-bottom:6px}.eventBtns{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.eventBtn{padding:9px 7px;border-radius:10px;font-weight:750;font-size:12px;transition:.15s}.eventBtn.selected{outline:3px solid #fff;box-shadow:0 0 0 2px rgba(138,180,255,.35) inset;transform:translateY(-1px)}.eventBadge{padding:4px 7px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap;border:1px solid var(--line)}.keywordMore{margin-top:9px}.silenceHero{border-color:#46597f}.silenceStatus{font-weight:850;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.miniLegend{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-top:8px}.miniLegendCell{padding:6px 4px;border-radius:8px;border:1px solid var(--line);text-align:center;font-size:10px;display:flex;align-items:center;justify-content:center;min-height:42px;line-height:1.15}.speedDetail{font-size:12px;color:var(--muted);margin-top:5px}.typeBtn{padding:10px 8px;border-radius:10px;font-weight:800;font-size:12px}.typeBtn.selected{outline:3px solid #fff}.typeBadge{padding:4px 7px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap}.notice{padding:10px;border-radius:10px;background:#10172a;border:1px solid var(--line);margin-top:10px}.tableWrap{overflow:auto;margin-top:10px}table{width:100%;border-collapse:collapse;min-width:780px}th,td{padding:9px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}th{color:var(--muted);font-weight:700}.profileGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:stretch}.profileWideRow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px}.profileWide{min-height:150px}.analysisHero{transition:background .2s,border-color .2s}.analysisHero .miniLegend{margin-top:auto;padding-top:8px}.profileBox{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px;min-height:106px;display:flex;flex-direction:column;justify-content:flex-start;overflow:hidden}.profileValue{font-size:22px;font-weight:850;margin-top:3px;line-height:1.15;min-height:28px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rangeStrip{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}.rangeCell{border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;font-size:11px}.currentHero{border:2px solid var(--accent);background:#101b34;contain:layout paint}.graphDetails summary{cursor:pointer;font-weight:800}.graphDetails[open] summary{margin-bottom:8px}.transcriptLive{max-height:150px;overflow:auto;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px;margin-top:8px;font-size:13px}.transcriptLine{padding:5px 0;border-bottom:1px solid var(--line)}.recognitionGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:10px}.recognitionBox{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px}.recognitionValue{font-size:20px;font-weight:850;margin-top:3px}.interimBox{margin-top:8px;padding:8px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);min-height:38px}.missed{color:var(--red)}.rescued{color:var(--amber)}.kwGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.kwRow{display:grid;grid-template-columns:110px 1fr 48px;gap:8px;align-items:center}.kwBar{height:10px;background:#111827;border-radius:999px;overflow:hidden}.kwFill{height:100%;background:var(--accent)}.modal{position:fixed;inset:0;background:rgba(0,0,0,.68);display:none;align-items:center;justify-content:center;padding:16px;z-index:999}.modal.open{display:flex}.modalCard{width:min(1000px,100%);max-height:90vh;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:16px}.memoEditGrid{display:grid;gap:10px}.editEventGroups{display:grid;gap:10px}.analysisStats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.analysisStat{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px}.healthGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.healthBox{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px}.healthValue{font-size:20px;font-weight:850;margin-top:3px}.progress{height:10px;background:#111827;border:1px solid var(--line);border-radius:999px;overflow:hidden}.progressFill{height:100%;width:0;background:var(--good)}.health-good{color:var(--good)}.health-warn{color:var(--amber)}.health-bad{color:var(--red)}.warningPop{position:fixed;right:16px;bottom:16px;z-index:1200;width:min(420px,calc(100vw - 32px));background:#251a22;border:1px solid var(--red);border-radius:14px;padding:14px;box-shadow:0 12px 35px rgba(0,0,0,.45);display:none}.warningPop.open{display:block}.ok{color:var(--good)}.warn{color:var(--amber)}.bad{color:var(--red)}@media(max-width:800px){.profileWideRow{grid-template-columns:1fr}.recognitionGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.miniLegend{grid-template-columns:1fr 1fr}.kwGrid{grid-template-columns:1fr}.analysisStats{grid-template-columns:repeat(2,minmax(0,1fr))}.healthGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.profileWideRow{grid-template-columns:1fr}.profileGrid{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:8px}.cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:8px}.card,.panel{padding:10px}.card{min-height:100px;overflow:hidden}.panel{margin-top:8px}.legend{grid-template-columns:1fr}.profileGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.rangeStrip{grid-template-columns:1fr}.memoTypeBtns{grid-template-columns:1fr 1fr}.eventBtns{grid-template-columns:1fr 1fr}.value{font-size:19px}.profileValue{font-size:19px}canvas{height:260px}select{min-width:100%}.big{font-size:22px}}
 </style></head><body><main>
-<div class="row between"><div><div class="small">Y Voice Coach <span id="appVersion">v3.6.4</span></div><div class="big"><b>リアルタイム配信ボイス解析</b></div></div><div class="row"><span id="versionBadge" class="pill">v3.6.4</span><span id="secureBadge" class="pill">Secure確認中</span><span id="permBadge" class="pill">Mic未確認</span></div></div>
+<div class="row between"><div><div class="small">Y Voice Coach <span id="appVersion">v3.6.5</span></div><div class="big"><b>リアルタイム配信ボイス解析</b></div></div><div class="row"><span id="versionBadge" class="pill">v3.6.5</span><span id="secureBadge" class="pill">Secure確認中</span><span id="permBadge" class="pill">Mic未確認</span></div></div>
 <div id="secureNotice" class="notice small"></div>
 <section class="panel"><div class="row between"><div><b>マイク設定</b><div class="small">許可後、PCでは入力マイクを選択できます。</div></div><div class="row"><button id="permissionBtn">マイク許可を確認</button><button id="refreshBtn">入力機器を再取得</button></div></div><div class="row" style="margin-top:12px"><label class="small">入力マイク</label><select id="micSelect"><option value="">デフォルトマイク</option></select></div><div class="row" style="margin-top:12px"><div id="meter"><div id="meterFill"></div></div><span id="meterText" class="small">入力レベル —</span></div><div class="row" style="margin-top:12px"><button id="testBtn">マイクテスト</button><button id="startBtn" class="primary">配信記録開始</button><button id="stopBtn" class="danger" disabled>配信記録終了</button></div><div id="deviceHelp" class="small" style="margin-top:8px"></div></section>
 <div class="cards"><div class="card"><div class="label">状態</div><div id="state" class="value">待機中</div></div><div class="card"><div class="label">経過時間</div><div id="elapsed" class="value">00:00:00</div></div><div class="card"><div class="label">現在 F0</div><div class="value"><span id="hz">—</span> <small>Hz</small></div><div id="nowTone" class="toneTag">—</div></div><div id="avg30Card" class="card avgCard"><div class="label">30秒平均</div><div class="value"><span id="avg30">—</span> <small>Hz</small></div><div id="avg30Tone" class="toneTag">—</div></div><div id="avg60Card" class="card avgCard"><div class="label">1分平均</div><div class="value"><span id="avg60">—</span> <small>Hz</small></div><div id="avg60Tone" class="toneTag">—</div></div>
@@ -87,7 +87,7 @@
   <div class="row" style="margin-top:12px"><button id="analysisPdfBtn">言葉分析PDF</button><button id="analysisJsonBtn">分析JSON</button></div>
 </div></div><div id="memoryWarning" class="warningPop"><b>メモリ負荷が高くなっています</b><div id="memoryWarningText" class="small" style="margin-top:6px"></div><div class="row" style="margin-top:10px"><button id="warningCleanupBtn">今すぐ安全に整理</button><button id="warningCloseBtn">閉じる</button></div></div>
 <script>
-const APP_VERSION='3.6.4';
+const APP_VERSION='3.6.5';
 const $=id=>document.getElementById(id),isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);let audioCtx=null,analyser=null,source=null,stream=null,rafId=null,sampleTimer=null,running=false,testing=false,startAt=0,sessionId=null,lastPitch=null,data=[],memos=[],selectedMemoType=null,selectedEvents=[],editingMemoIndex=null,transcripts=[],speechRec=null,speechActive=false,currentAnalysisSession=null,speakingNow=false,silenceStarted=null,silenceSpans=[],speechRestartCount=0,speechRestartTimer=null,memoryMonitorTimer=null,keywordCounter=new Map(),lastMemoryWarning=0,keywordExpanded=false,historicalSilenceRate=null,historicalActiveCpm=null,historicalAvgSilenceSec=null,currentInterimText='',lastInterimAt=0,utterances=[],currentUtterance=null,utteranceSeq=0,duplicateTranscriptCount=0;const DB='YVoiceCoachDB',STORE='sessions';
 const HIST_MIN=60,HIST_MAX=500,HIST_SIZE=HIST_MAX-HIST_MIN+1;
 let historyHist=new Uint32Array(HIST_SIZE),historyCount=0,historySessionsMs=0,currentHist=new Uint32Array(HIST_SIZE),currentVoiced=0;
@@ -177,39 +177,68 @@ function stripKnownPrefix(text,history,windowMs=60000,ms=0){
 }
 function dedupeTranscriptWindow(list,windowMs=60000){
   const sorted=(list||[]).map((t,i)=>({...t,__order:i})).sort((a,b)=>(a.ms??0)-(b.ms??0)||a.__order-b.__order);
-  const exactClean=[],removed=[],trimmed=[];
-
-  // Pass 1: hard exact duplicate removal in a 60-second window.
-  // Always keep the earliest timestamped copy, regardless of insertion order or text length.
-  for(const t of sorted){
-    const dup=findExactDuplicate60s(t.text,exactClean,t.ms,windowMs);
-    if(dup){
-      removed.push({...t,dedupe_reason:'exact-60s'});
-      continue;
-    }
-    exactClean.push(t);
-  }
-
-  // Pass 2: collapse cumulative recognizer prefixes while preserving genuinely new suffix text.
-  const out=[];
-  for(const t0 of exactClean){
+  const out=[],removed=[],trimmed=[];
+  for(const t0 of sorted){
     const t={...t0};
     delete t.__order;
-    const r=stripKnownPrefix(t.text,out,windowMs,t.ms);
-    if(!r.keep){
-      removed.push({...t0,dedupe_reason:r.reason});
-      continue;
+
+    // 1) exact duplicate
+    const exact=findExactDuplicate60s(t.text,out,t.ms,windowMs);
+    if(exact){removed.push({...t0,dedupe_reason:'exact-60s'});continue}
+
+    // 2) old full-prefix duplication
+    const prefix=stripKnownPrefix(t.text,out,windowMs,t.ms);
+    if(!prefix.keep){removed.push({...t0,dedupe_reason:prefix.reason});continue}
+    if(prefix.text!==t.text){
+      trimmed.push({before:t.text,after:prefix.text,ms:t.ms,reason:prefix.reason});
+      t.text=prefix.text;t.prefix_stripped=true;
     }
-    if(r.text!==t.text){
-      trimmed.push({before:t.text,after:r.text,ms:t.ms});
-      t.text=r.text;
-      t.prefix_stripped=true;
+
+    // 3) partial overlap: previous suffix == new prefix
+    const overlap=stripOverlapWithRecent(t.text,out,windowMs,t.ms);
+    if(!overlap.keep){removed.push({...t0,dedupe_reason:overlap.reason});continue}
+    if(overlap.text!==t.text){
+      trimmed.push({before:t.text,after:overlap.text,ms:t.ms,reason:overlap.reason,overlap:overlap.overlap});
+      t.text=overlap.text;t.partial_overlap_stripped=true;
     }
-    out.push(t);
+
+    if(normalizeTranscriptText(t.text))out.push(t);
   }
   return{items:out,removed,trimmed};
 }
 function applyTranscriptCleanup(){const r=dedupeTranscriptWindow(transcripts,60000);if(r.removed.length){transcripts=r.items;duplicateTranscriptCount+=r.removed.length;const el=$('duplicateCount');if(el)el.textContent=duplicateTranscriptCount;rebuildKeywordCounter();renderLiveTranscript();updateRecognitionStats();updateSpeedAnalysis()}return r.removed.length}
+function longestPrefixSuffixOverlap(prevText,newText,minChars=3){
+  const a=normalizeTranscriptText(prevText),b=normalizeTranscriptText(newText);
+  const max=Math.min(a.length,b.length);
+  for(let len=max;len>=minChars;len--){
+    if(a.slice(-len)===b.slice(0,len))return len;
+  }
+  return 0;
+}
+function rawCutForNormalizedPrefix(rawText,normLen){
+  if(normLen<=0)return 0;
+  for(let i=0;i<rawText.length;i++){
+    if(normalizeTranscriptText(rawText.slice(0,i+1)).length>=normLen)return i+1;
+  }
+  return rawText.length;
+}
+function stripOverlapWithRecent(text,history,windowMs=60000,ms=0){
+  let candidate=(text||'').trim();
+  if(!candidate)return{keep:false,text:'',reason:'empty',overlap:0};
+  const recent=(history||[]).filter(x=>x&&typeof x.ms==='number'&&Math.abs(ms-x.ms)<=windowMs).slice().sort((a,b)=>b.ms-a.ms);
+  let best={len:0,prev:null};
+  for(const prev of recent){
+    const len=longestPrefixSuffixOverlap(prev.text,candidate,3);
+    if(len>best.len)best={len,prev};
+  }
+  if(best.len>0){
+    const cut=rawCutForNormalizedPrefix(candidate,best.len);
+    const suffix=candidate.slice(cut).replace(/^[\s、。！？,.!?・「」『』（）()\-ー]+/,'').trim();
+    if(!suffix)return{keep:false,text:'',reason:'partial-overlap-full',overlap:best.len};
+    return{keep:true,text:suffix,reason:'partial-overlap',overlap:best.len};
+  }
+  return{keep:true,text:candidate,reason:'new',overlap:0};
+}
 function normalizeTranscriptText(s){return (s||'').toLowerCase().replace(/[\s、。！？,.!?・「」『』（）()\-ー]/g,'')}
 function transcriptSimilarity(a,b){a=normalizeTranscriptText(a);b=normalizeTranscriptText(b);if(!a||!b)return 0;if(a===b)return 1;const short=a.length<=b.length?a:b,long=a.length>b.length?a:b;if(long.includes(short))return short.length/long.length;let same=0;const n=Math.min(a.length,b.length);for(let i=0;i<n;i++)if(a[i]===b[i])same++;return same/Math.max(a.length,b.length)}
 function rebuildKeywordCounter(){keywordCounter=new Map();for(const t of transcripts)for(const w of tokenize(t.text))keywordCounter.set(w,(keywordCounter.get(w)||0)+1)}
@@ -282,6 +311,23 @@ function saveTranscriptText(text,rescued=false,forcedUtterance=null){
     text=stripped.text;
     meta.text=text;
     meta.prefix_stripped=true;
+  }
+
+  // Then remove any partial overlap where the end of a recent sentence
+  // is repeated at the beginning of this one.
+  const overlap=stripOverlapWithRecent(text,transcripts,60000,meta.ms);
+  if(!overlap.keep){
+    duplicateTranscriptCount++;
+    $('duplicateCount').textContent=duplicateTranscriptCount;
+    currentInterimText='';
+    $('interimBox').innerHTML='<span class="small">1分以内の部分一致重複を削除しました</span>';
+    renderLiveTranscript();updateRecognitionStats();updateSpeedAnalysis();saveSession(false);
+    return;
+  }
+  if(overlap.text!==text){
+    text=overlap.text;
+    meta.text=text;
+    meta.partial_overlap_stripped=true;
   }
 
   const dup=findDuplicateTranscript(text,meta,u);
@@ -361,10 +407,10 @@ async function getSessions(){const db=await openDB();return new Promise((res,rej
 
 async function putSessionObject(s){const db=await openDB();return new Promise((res,rej)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(s);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
 function sessionPortable(s){return JSON.parse(JSON.stringify(s))}
-async function buildSaveBundle(){if(running)await saveSession(false);const sessions=(await getSessions()).map(sessionPortable).map(s=>{const r=dedupeTranscriptWindow(s.transcripts||[],60000);s.transcripts=r.items;s.dedupe_removed=(s.dedupe_removed||0)+r.removed.length;s.prefix_trimmed=(s.prefix_trimmed||0)+r.trimmed.length;s.exact_dedupe_window_ms=60000;return s});return{format:'YVC_SAVE_BUNDLE',schema_version:'1.0',app_version:APP_VERSION,exported_at:new Date().toISOString(),description:'Y Voice Coach portable save data. Safe for ChatGPT analysis/editing and re-import.',import_policy:'merge_by_session_id',assistant_analysis:{summary:'',notes:[],recommendations:[],tags:[]},sessions}}
+async function buildSaveBundle(){if(running)await saveSession(false);const sessions=(await getSessions()).map(sessionPortable).map(s=>{const r=dedupeTranscriptWindow(s.transcripts||[],60000);s.transcripts=r.items;s.dedupe_removed=(s.dedupe_removed||0)+r.removed.length;s.prefix_trimmed=(s.prefix_trimmed||0)+r.trimmed.length;s.exact_dedupe_window_ms=60000;s.partial_overlap_dedupe=true;return s});return{format:'YVC_SAVE_BUNDLE',schema_version:'1.0',app_version:APP_VERSION,exported_at:new Date().toISOString(),description:'Y Voice Coach portable save data. Safe for ChatGPT analysis/editing and re-import.',import_policy:'merge_by_session_id',assistant_analysis:{summary:'',notes:[],recommendations:[],tags:[]},sessions}}
 function validateSaveBundle(b){if(!b||b.format!=='YVC_SAVE_BUNDLE')throw Error('YVC Save Bundleではありません');if(!Array.isArray(b.sessions))throw Error('sessions配列がありません');for(const s of b.sessions){if(!s||typeof s.id!=='string'||!Array.isArray(s.samples))throw Error('セッション形式が不正です: '+(s?.id||'unknown'))}return true}
 async function exportSaveBundle(){const b=await buildSaveBundle(),name='y_voice_coach_save_'+new Date().toISOString().replace(/[:.]/g,'-')+'.json';dl(name,new Blob([JSON.stringify(b,null,2)],{type:'application/json;charset=utf-8'}));$('saveDataStatus').textContent='書き出し完了';$('saveDataStatus').className='pill ok'}
-async function importSaveBundle(file){const text=await file.text(),b=JSON.parse(text);validateSaveBundle(b);let n=0;for(const s of b.sessions){const r=dedupeTranscriptWindow(s.transcripts||[],60000);s.transcripts=r.items;s.dedupe_removed=(s.dedupe_removed||0)+r.removed.length;s.prefix_trimmed=(s.prefix_trimmed||0)+r.trimmed.length;s.exact_dedupe_window_ms=60000;await putSessionObject(s);n++}$('saveDataStatus').textContent=n+'セッション読込';$('saveDataStatus').className='pill ok';await loadSessions();await rebuildHistoricalProfile();return b}
+async function importSaveBundle(file){const text=await file.text(),b=JSON.parse(text);validateSaveBundle(b);let n=0;for(const s of b.sessions){const r=dedupeTranscriptWindow(s.transcripts||[],60000);s.transcripts=r.items;s.dedupe_removed=(s.dedupe_removed||0)+r.removed.length;s.prefix_trimmed=(s.prefix_trimmed||0)+r.trimmed.length;s.exact_dedupe_window_ms=60000;s.partial_overlap_dedupe=true;await putSessionObject(s);n++}$('saveDataStatus').textContent=n+'セッション読込';$('saveDataStatus').className='pill ok';await loadSessions();await rebuildHistoricalProfile();return b}
 async function saveAllToBrowser(){if(running)await saveSession(false);$('saveDataStatus').textContent='ブラウザ保存済み';$('saveDataStatus').className='pill ok';await loadSessions()}
 function fmt(ms){const s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor((s%3600)/60),x=s%60;return[h,m,x].map(v=>String(v).padStart(2,'0')).join(':')}function mean(arr){return arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:null}function stats(samples){let n=0,sum=0,min=null,max=null;for(const p of samples){if(p.hz==null)continue;n++;sum+=p.hz;min=min==null?p.hz:Math.min(min,p.hz);max=max==null?p.hz:Math.max(max,p.hz)}return{avg:n?sum/n:null,min,max,duration:samples.length?samples.at(-1).ms:0}}
 function silenceStats(){const completed=silenceSpans.slice();if(!speakingNow&&silenceStarted!=null)completed.push({start:silenceStarted,end:Date.now()-startAt});const valid=completed.filter(x=>x.end-x.start>=500);const total=valid.reduce((a,x)=>a+(x.end-x.start),0),duration=data.length?data.at(-1).ms:0,avg=valid.length?total/valid.length:0,longest=valid.length?Math.max(...valid.map(x=>x.end-x.start)):0;return{total,avg,longest,count:valid.length,rate:duration?total/duration*100:0}}
