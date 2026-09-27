@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<title>Y Voice Coach v1</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1020;--panel:#151b2d;--panel2:#0f1526;--line:#2b3550;--text:#f4f6fb;--muted:#9aa7c2;--accent:#8ab4ff;--good:#9be2b0;--warn:#ffd18a;--bad:#ff9b9b}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{min-height:100vh}main{max-width:1180px;margin:auto;padding:18px}
+h1{font-size:22px;margin:0}.small{font-size:12px;color:var(--muted)}.muted{color:var(--muted)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:14px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}
+button,select,input{font:inherit}button{border:1px solid var(--line);background:#202a45;color:var(--text);padding:11px 15px;border-radius:11px;cursor:pointer}
+button.primary{background:#315ea8}button.danger{background:#5a2833}button:disabled{opacity:.45;cursor:not-allowed}
+select,input{background:var(--panel2);border:1px solid var(--line);color:var(--text);padding:11px;border-radius:10px}
+select{min-width:250px}input{flex:1;min-width:220px}
+.cards{display:grid;grid-template-columns:repeat(5,minmax(140px,1fr));gap:10px;margin-top:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px}
+.label{font-size:12px;color:var(--muted)}.value{font-size:25px;font-weight:700;margin-top:4px}
+.status{font-weight:700}.ok{color:var(--good)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+canvas{display:block;width:100%;height:340px;background:var(--panel2);border-radius:12px;margin-top:10px}
+#meter{height:10px;background:#111827;border-radius:999px;overflow:hidden;border:1px solid var(--line);flex:1;min-width:180px}
+#meterFill{height:100%;width:0;background:#8ab4ff}
+#memoList{display:grid;gap:7px;margin-top:10px}.memo{display:flex;gap:10px;border-bottom:1px solid var(--line);padding:8px 0}.time{font-weight:700;white-space:nowrap}
+.notice{padding:11px;border-radius:10px;background:#10172a;border:1px solid var(--line);margin-top:10px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}.pill{padding:6px 9px;border-radius:999px;border:1px solid var(--line);font-size:12px}
+@media(max-width:800px){main{padding:12px}.cards{grid-template-columns:repeat(2,1fr)}.value{font-size:21px}canvas{height:280px}select{min-width:100%}}
+</style>
+</head>
+<body>
+<main>
+  <div class="row between">
+    <div>
+      <div class="small">Y Voice Coach</div>
+      <h1>リアルタイム配信ボイス解析</h1>
+    </div>
+    <div class="tabs">
+      <span id="secureBadge" class="pill">Secure Context確認中</span>
+      <span id="permBadge" class="pill">Mic Permission未確認</span>
+    </div>
+  </div>
+
+  <div id="secureNotice" class="notice small"></div>
+
+  <section class="panel">
+    <div class="row between">
+      <div>
+        <b>マイク設定</b>
+        <div class="small">最初に「マイク許可を確認」を押してください。許可後に端末名が表示されます。</div>
+      </div>
+      <div class="row">
+        <button id="permissionBtn">マイク許可を確認</button>
+        <button id="refreshBtn">入力機器を再取得</button>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <label class="small" for="micSelect">入力マイク</label>
+      <select id="micSelect"><option value="">デフォルトマイク</option></select>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <div id="meter"><div id="meterFill"></div></div>
+      <span id="meterText" class="small">入力レベル —</span>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <button id="testBtn">マイクテスト</button>
+      <button id="startBtn" class="primary">配信記録開始</button>
+      <button id="stopBtn" class="danger" disabled>配信記録終了</button>
+    </div>
+    <div id="deviceHelp" class="small" style="margin-top:10px"></div>
+  </section>
+
+  <div class="cards">
+    <div class="card"><div class="label">状態</div><div id="state" class="value">待機中</div></div>
+    <div class="card"><div class="label">経過時間</div><div id="elapsed" class="value">00:00:00</div></div>
+    <div class="card"><div class="label">現在 F0</div><div class="value"><span id="hz">—</span> <small>Hz</small></div></div>
+    <div class="card"><div class="label">30秒平均</div><div class="value"><span id="avg30">—</span> <small>Hz</small></div></div>
+    <div class="card"><div class="label">1分平均</div><div class="value"><span id="avg60">—</span> <small>Hz</small></div></div>
+  </div>
+
+  <section class="panel">
+    <div class="row between">
+      <div>
+        <b>ピッチ変動グラフ</b>
+        <div class="small">0.5秒ごとのF0を記録。無声音は欠損として扱います。</div>
+      </div>
+      <div class="row">
+        <label class="small">表示範囲</label>
+        <select id="windowSelect">
+          <option value="60">直近1分</option>
+          <option value="300">直近5分</option>
+          <option value="900">直近15分</option>
+          <option value="all">全体</option>
+        </select>
+        <span id="coach" class="status">待機中</span>
+      </div>
+    </div>
+    <canvas id="chart" width="1100" height="340"></canvas>
+  </section>
+
+  <form id="memoForm" class="panel">
+    <b>タイムスタンプ付きメモ</b>
+    <div class="small">メモ内容を書き、Enterまたは「この時刻に記録」で、その瞬間の配信経過時間に紐づけます。</div>
+    <div class="row" style="margin-top:10px">
+      <input id="memoInput" maxlength="300" placeholder="例：初見さんが来た / ゲームで盛り上がった / 告知開始">
+      <button id="memoBtn" disabled>この時刻に記録</button>
+    </div>
+    <div id="memoMsg" class="small" style="margin-top:7px">配信記録開始後に利用できます。</div>
+  </form>
+
+  <section class="panel">
+    <div class="row between">
+      <b>メモ履歴</b>
+      <span id="memoCount" class="small">0件</span>
+    </div>
+    <div id="memoList"><span class="small">まだメモはありません。</span></div>
+  </section>
+
+  <section class="panel">
+    <div class="row between">
+      <div>
+        <b>セッション保存</b>
+        <div class="small">音声そのものは保存せず、時刻・F0・メモをIndexedDBに保存します。</div>
+      </div>
+      <div class="row">
+        <button id="exportJsonBtn" disabled>JSON出力</button>
+        <button id="exportCsvBtn" disabled>CSV出力</button>
+      </div>
+    </div>
+    <div id="saveInfo" class="small" style="margin-top:8px"></div>
+  </section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+let audioCtx=null, analyser=null, source=null, stream=null, rafId=null, sampleTimer=null;
+let meterTimer=null, running=false, testing=false, startAt=0, sessionId=null;
+let lastPitch=null, data=[], memos=[];
+
+const DB_NAME="YVoiceCoachDB", STORE="sessions";
+
+function openDB(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open(DB_NAME,1);
+    req.onupgradeneeded=()=>{ if(!req.result.objectStoreNames.contains(STORE)) req.result.createObjectStore(STORE,{keyPath:"id"}); };
+    req.onsuccess=()=>resolve(req.result); req.onerror=()=>reject(req.error);
+  });
+}
+async function saveSession(final=false){
+  if(!sessionId) return;
+  const db=await openDB();
+  const tx=db.transaction(STORE,"readwrite");
+  tx.objectStore(STORE).put({
+    id:sessionId,
+    startTime:new Date(startAt).toISOString(),
+    endTime:final?new Date().toISOString():null,
+    sampleIntervalMs:500,
+    samples:data,
+    memos:memos
+  });
+  $("saveInfo").textContent=`保存済み: ${data.length.toLocaleString()}サンプル / ${memos.length}メモ`;
+}
+
+function fmt(ms){
+  const s=Math.floor(ms/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), x=s%60;
+  return [h,m,x].map(v=>String(v).padStart(2,"0")).join(":");
+}
+
+function secureStatus(){
+  if(window.isSecureContext){
+    $("secureBadge").textContent="Secure Context OK";
+    $("secureBadge").className="pill ok";
+    $("secureNotice").textContent="マイクアクセス可能な安全な接続です。";
+  }else{
+    $("secureBadge").textContent="Secure Context NG";
+    $("secureBadge").className="pill bad";
+    $("secureNotice").innerHTML="このページは安全な接続ではないため、ブラウザがマイクを拒否する可能性があります。<b>HTTPSで公開</b>するか、PCなら <b>localhost</b> で開いてください。iPhone/iPadでは file:// や一部のプレビュー画面ではマイクが使えません。";
+  }
+  $("deviceHelp").textContent = isIOS
+    ? "iPhone/iPadではSafariまたはホーム画面追加したWebアプリでの利用を推奨します。iOSではブラウザ側の仕様により、接続マイクの個別選択が制限される場合があります。"
+    : "PCでは、マイク許可後に接続済み入力デバイスをここから選択できます。";
+}
+
+async function permissionState(){
+  try{
+    if(!navigator.permissions) return;
+    const p=await navigator.permissions.query({name:"microphone"});
+    const update=()=>{
+      $("permBadge").textContent=`Mic: ${p.state}`;
+      $("permBadge").className="pill "+(p.state==="granted"?"ok":p.state==="denied"?"bad":"warn");
+    };
+    update(); p.onchange=update;
+  }catch{}
+}
+
+async function requestPermission(){
+  if(!navigator.mediaDevices?.getUserMedia) throw new Error("このブラウザではマイクAPIが利用できません。");
+  const s=await navigator.mediaDevices.getUserMedia({audio:true});
+  s.getTracks().forEach(t=>t.stop());
+  await refreshDevices();
+  await permissionState();
+}
+
+async function refreshDevices(){
+  if(!navigator.mediaDevices?.enumerateDevices) return;
+  const devices=await navigator.mediaDevices.enumerateDevices();
+  const aud=devices.filter(d=>d.kind==="audioinput");
+  const current=$("micSelect").value;
+  $("micSelect").innerHTML='<option value="">デフォルトマイク</option>';
+  aud.forEach((d,i)=>{
+    const o=document.createElement("option");
+    o.value=d.deviceId;
+    o.textContent=d.label || `マイク ${i+1}`;
+    $("micSelect").appendChild(o);
+  });
+  if([...$("micSelect").options].some(o=>o.value===current)) $("micSelect").value=current;
+}
+
+function selectedConstraints(){
+  const id=$("micSelect").value;
+  const audio={
+    echoCancellation:false,
+    noiseSuppression:false,
+    autoGainControl:false,
+    channelCount:1
+  };
+  if(id) audio.deviceId={exact:id};
+  return {audio};
+}
+
+function autoCorrelate(buf,sr){
+  const SIZE=buf.length;
+  let rms=0;
+  for(let i=0;i<SIZE;i++) rms+=buf[i]*buf[i];
+  rms=Math.sqrt(rms/SIZE);
+  if(rms<0.008) return null;
+
+  let r1=0,r2=SIZE-1,th=0.15;
+  for(let i=0;i<SIZE/2;i++){ if(Math.abs(buf[i])<th){r1=i;break;} }
+  for(let i=1;i<SIZE/2;i++){ if(Math.abs(buf[SIZE-i])<th){r2=SIZE-i;break;} }
+  const b=buf.slice(r1,r2), N=b.length;
+  if(N<32) return null;
+
+  const c=new Float32Array(N);
+  for(let lag=0;lag<N;lag++){
+    let sum=0;
+    for(let j=0;j<N-lag;j++) sum+=b[j]*b[j+lag];
+    c[lag]=sum;
+  }
+  let d=0;
+  while(d+1<N && c[d]>c[d+1]) d++;
+  let max=-Infinity,pos=-1;
+  for(let i=d;i<N;i++){ if(c[i]>max){max=c[i];pos=i;} }
+  if(pos<=0) return null;
+  let T0=pos;
+  if(pos>0 && pos<N-1){
+    const x1=c[pos-1],x2=c[pos],x3=c[pos+1];
+    const a=(x1+x3-2*x2)/2, bb=(x3-x1)/2;
+    if(a) T0-=bb/(2*a);
+  }
+  const f=sr/T0;
+  return (f>=60 && f<=500)?f:null;
+}
+
+function updateMeter(buf){
+  let rms=0;
+  for(let i=0;i<buf.length;i++) rms+=buf[i]*buf[i];
+  rms=Math.sqrt(rms/buf.length);
+  const pct=Math.max(0,Math.min(100,Math.round(rms*350)));
+  $("meterFill").style.width=pct+"%";
+  $("meterText").textContent=`入力レベル ${pct}%`;
+}
+
+function audioLoop(){
+  if(!audioCtx || !analyser) return;
+  const buf=new Float32Array(analyser.fftSize);
+  analyser.getFloatTimeDomainData(buf);
+  updateMeter(buf);
+  lastPitch=autoCorrelate(buf,audioCtx.sampleRate);
+  $("hz").textContent=lastPitch?Math.round(lastPitch):"—";
+  rafId=requestAnimationFrame(audioLoop);
+}
+
+async function openAudio(){
+  if(stream) stream.getTracks().forEach(t=>t.stop());
+  stream=await navigator.mediaDevices.getUserMedia(selectedConstraints());
+  audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==="suspended") await audioCtx.resume();
+  source=audioCtx.createMediaStreamSource(stream);
+  analyser=audioCtx.createAnalyser();
+  analyser.fftSize=2048;
+  analyser.smoothingTimeConstant=0;
+  source.connect(analyser);
+  audioLoop();
+}
+
+async function closeAudio(){
+  if(rafId) cancelAnimationFrame(rafId);
+  if(stream) stream.getTracks().forEach(t=>t.stop());
+  stream=null;
+  if(audioCtx){ try{await audioCtx.close();}catch{} }
+  audioCtx=null; analyser=null; source=null;
+  $("meterFill").style.width="0%";
+  $("meterText").textContent="入力レベル —";
+  $("hz").textContent="—";
+}
+
+function average(seconds){
+  if(!running) return null;
+  const cutoff=Date.now()-startAt-seconds*1000;
+  const vals=data.filter(x=>x.ms>=cutoff && x.hz!=null).map(x=>x.hz);
+  return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null;
+}
+
+function coachText(){
+  const a=average(30);
+  if(a==null) return "音声待機";
+  if(a<110) return "かなり低め・落ち着き";
+  if(a<135) return "落ち着いた雑談寄り";
+  if(a<165) return "通常雑談寄り";
+  return "活発・高め";
+}
+
+function sample(){
+  const ms=Date.now()-startAt;
+  data.push({ms,hz:lastPitch?Math.round(lastPitch*10)/10:null});
+  $("elapsed").textContent=fmt(ms);
+  const a30=average(30),a60=average(60);
+  $("avg30").textContent=a30?Math.round(a30):"—";
+  $("avg60").textContent=a60?Math.round(a60):"—";
+  $("coach").textContent=coachText();
+  drawChart();
+  if(data.length%20===0) saveSession(false);
+}
+
+function drawChart(){
+  const c=$("chart"),g=c.getContext("2d"),W=c.width,H=c.height;
+  g.clearRect(0,0,W,H);
+  const min=60,max=240;
+  g.strokeStyle="#2a3553";g.fillStyle="#9aa7c2";g.font="12px system-ui";
+  [60,120,180,240].forEach(v=>{
+    const y=H-25-(v-min)/(max-min)*(H-45);
+    g.beginPath();g.moveTo(45,y);g.lineTo(W-10,y);g.stroke();g.fillText(v+" Hz",4,y+4);
+  });
+  if(!data.length) return;
+  const now=data[data.length-1].ms;
+  const win=$("windowSelect").value;
+  const cut=win==="all"?0:Math.max(0,now-(+win)*1000);
+  const vis=data.filter(x=>x.ms>=cut);
+  const span=Math.max(1,now-cut);
+
+  g.strokeStyle="#8ab4ff";g.lineWidth=2;g.beginPath();
+  let started=false;
+  for(const p of vis){
+    if(p.hz==null){started=false;continue;}
+    const x=45+(p.ms-cut)/span*(W-60);
+    const hz=Math.max(min,Math.min(max,p.hz));
+    const y=H-25-(hz-min)/(max-min)*(H-45);
+    if(!started){g.moveTo(x,y);started=true;}else g.lineTo(x,y);
+  }
+  g.stroke();
+
+  g.fillStyle="#ffd18a";
+  memos.filter(m=>m.ms>=cut).forEach(m=>{
+    const x=45+(m.ms-cut)/span*(W-60);
+    g.beginPath();g.arc(x,15,5,0,Math.PI*2);g.fill();
+  });
+}
+
+function renderMemos(){
+  $("memoCount").textContent=memos.length+"件";
+  if(!memos.length){$("memoList").innerHTML='<span class="small">まだメモはありません。</span>';return;}
+  $("memoList").innerHTML=memos.slice().reverse().map(m=>`<div class="memo"><span class="time">${fmt(m.ms)}</span><span>${escapeHtml(m.text)}</span></div>`).join("");
+}
+function escapeHtml(s){return s.replace(/[&<>"]/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]));}
+
+async function startTest(){
+  if(testing || running) return;
+  try{
+    await openAudio(); testing=true;
+    $("state").textContent="マイクテスト中"; $("state").className="value ok";
+    $("testBtn").textContent="テスト停止";
+  }catch(e){
+    $("state").textContent="マイクエラー"; $("state").className="value bad";
+    alert("マイクを開始できませんでした。\n\n"+e.message+"\n\nHTTPSで開いているか、ブラウザのマイク許可を確認してください。");
+  }
+}
+async function stopTest(){
+  testing=false; await closeAudio();
+  $("state").textContent="待機中"; $("state").className="value";
+  $("testBtn").textContent="マイクテスト";
+}
+
+$("permissionBtn").onclick=async()=>{
+  try{await requestPermission();$("state").textContent="マイク許可OK";$("state").className="value ok";}
+  catch(e){$("state").textContent="マイク許可NG";$("state").className="value bad";alert(e.message);}
+};
+$("refreshBtn").onclick=refreshDevices;
+
+$("testBtn").onclick=async()=>{ testing?await stopTest():await startTest(); };
+
+$("startBtn").onclick=async()=>{
+  try{
+    if(testing) await stopTest();
+    await openAudio();
+    running=true; startAt=Date.now(); sessionId=new Date(startAt).toISOString(); data=[]; memos=[];
+    $("state").textContent="記録中"; $("state").className="value ok";
+    $("startBtn").disabled=true; $("stopBtn").disabled=false; $("memoBtn").disabled=false;
+    $("exportJsonBtn").disabled=true; $("exportCsvBtn").disabled=true;
+    $("elapsed").textContent="00:00:00"; renderMemos(); drawChart();
+    sample(); sampleTimer=setInterval(sample,500);
+  }catch(e){
+    $("state").textContent="開始失敗"; $("state").className="value bad";
+    alert("記録を開始できませんでした。\n\n"+e.message+"\n\nHTTPSで開いているか、ブラウザのマイク権限を確認してください。");
+  }
+};
+
+$("stopBtn").onclick=async()=>{
+  running=false; clearInterval(sampleTimer); await closeAudio(); await saveSession(true);
+  $("state").textContent="終了・保存済み"; $("state").className="value";
+  $("startBtn").disabled=false; $("stopBtn").disabled=true; $("memoBtn").disabled=true;
+  $("exportJsonBtn").disabled=false; $("exportCsvBtn").disabled=false;
+};
+
+$("memoForm").onsubmit=e=>{
+  e.preventDefault();
+  if(!running) return;
+  const text=$("memoInput").value.trim(); if(!text) return;
+  const ms=Date.now()-startAt;
+  memos.push({ms,text});
+  $("memoInput").value="";
+  $("memoMsg").textContent=`${fmt(ms)} に記録しました。`;
+  renderMemos(); drawChart(); saveSession(false);
+};
+
+$("windowSelect").onchange=drawChart;
+
+function download(name,blob){
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+$("exportJsonBtn").onclick=()=>{
+  const payload={sessionId,startTime:new Date(startAt).toISOString(),sampleIntervalMs:500,samples:data,memos};
+  download(`y_voice_${sessionId.replace(/[:.]/g,"-")}.json`,new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}));
+};
+$("exportCsvBtn").onclick=()=>{
+  const memoMap=new Map(memos.map(m=>[Math.round(m.ms/500)*500,m.text]));
+  let csv="elapsed_ms,elapsed_time,hz,memo\n";
+  for(const p of data){
+    const key=Math.round(p.ms/500)*500;
+    const memo=(memoMap.get(key)||"").replace(/"/g,'""');
+    csv+=`${p.ms},${fmt(p.ms)},${p.hz??""},"${memo}"\n`;
+  }
+  download(`y_voice_${sessionId.replace(/[:.]/g,"-")}.csv`,new Blob([csv],{type:"text/csv;charset=utf-8"}));
+};
+
+window.addEventListener("beforeunload",()=>{ if(running) saveSession(false); });
+
+secureStatus();
+permissionState();
+refreshDevices();
+</script>
+</body>
+</html>
